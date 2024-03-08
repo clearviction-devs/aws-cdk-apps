@@ -21,11 +21,7 @@ export class LinkScanStack extends Stack {
         linkScanFn.addToRolePolicy(
             new iam.PolicyStatement({
                 effect: iam.Effect.ALLOW,
-                actions: [
-                    'ses:SendEmail',
-                    'ses:SendRawEmail',
-                    'ses:SendTemplatedEmail',
-                ],
+                actions: ['ses:SendEmail'],
                 resources: ['*'],
             })
         )
