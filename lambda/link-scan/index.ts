@@ -93,7 +93,7 @@ const sendEmailParams = (
             Simple: {
                 Subject: {
                     Charset: 'UTF-8',
-                    Data: `Linkinator Report: ${scanDate}`,
+                    Data: `Monthly link scan report: ${scanDate}`,
                 },
                 Body: {
                     Html: {
@@ -120,13 +120,17 @@ const getHtmlContent = ({
     return `
         <html>
             <body>
-                <h1>Linkinator scan results 👀</h1>
+                <h1>Monthly link scan report</h1>
+                <p>
+                    Every month all of the internal and external links on the Clearviction website are scanned in search of any broken links. Here are the results from the most recent scan:
+                </p>
+                <h2>Overview</h2>
                 <ul>
                     <li style="font-size:18px">Passed: <b>${passed}</b></li>
                     <li style="font-size:18px">Links scanned: <b>${linksScanned}</b></li>
                     <li style="font-size:18px">Broken links found: <b>${brokenLinksCount}</b></li>
                 </ul>
-                <h2>Broken links:</h2>
+                <h2>Details</h2>
                 ${mapBrokenLinks(brokenLinks)}
             </body>
         </html>
