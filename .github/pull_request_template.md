@@ -36,16 +36,12 @@ Please self review your work before requesting further review. _Wait until you r
 -   [ ] Is the code and any new components organized in a logical location in the directory?
 -   [ ] Can any code snippets be refactored into reusable components?
 -   [ ] Are there opportunities to abstract common functionality into separate functions or classes?
--   [ ] Is there good use of CSS selectors when creating new components or refactoring old ones?
 
 #### Best Practices and Coding Standards
 
 -   [ ] Does the code follow the established coding standards and style guide of the project?
 -   [ ] Are there any violations of best practices that should be addressed?
--   [ ] Are there any hard-coded strings or UI elements that should be externalized?
--   [ ] Are all measurement units in REM? (border-radius, borders should still be in px)
 -   [ ] Is there any unnecessary commented out code lingering?
--   [ ] Are all files TypeScript?
 
 ### Overall PR Checklist:
 
