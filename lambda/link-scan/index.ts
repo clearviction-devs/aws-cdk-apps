@@ -5,7 +5,7 @@ import { LinkChecker } from 'linkinator'
 const SES_EMAIL_FROM = 'info@clearviction.org'
 const SES_EMAIL_TO = 'info@clearviction.org'
 
-interface LinkData {
+export interface LinkData {
     passed: boolean
     linksScanned: number
     brokenLinksCount: number
@@ -42,7 +42,7 @@ export const handler: Handler = async () => {
     }
 }
 
-const checkLinks = async () => {
+export const checkLinks = async () => {
     const checker = new LinkChecker()
     const brokenLinks: LinkData['brokenLinks'] = []
 
@@ -71,7 +71,7 @@ const checkLinks = async () => {
     }
 }
 
-const sendEmail = async (data: LinkData) => {
+export const sendEmail = async (data: LinkData) => {
     const ses = new SESv2Client({ region: REGION })
     const scanDate = new Date().toLocaleString()
 

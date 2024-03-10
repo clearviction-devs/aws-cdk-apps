@@ -53,9 +53,8 @@ The stack uses an EventBridge rule `monthlyOnTheFirstDayRule`, that runs on a cr
 1. Empty local `dist` folder _(if you had previously built it)_
 1. Make changes locally
 1. Add any appropriate unit tests and ensure no existing unit tests are broken
-1. Before deploying any changes to production, it’s important to run tests
-1. Format your code with `npm run format`
-1. Run `npm run build`
+1. Before deploying any changes to production, it’s important to run the tests
+1. Run `npm run build` (incudes a prebuild script that lints and formats)
 1. Configure the `AWS CLI` with `aws configure`
 1. Make sure `docker desktop` is running
 1. Run `cdk deploy`
