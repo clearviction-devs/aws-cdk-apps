@@ -6,7 +6,7 @@
     },
     "scripts": {
         "prebuild": "npm run lint && npm run format",
-        "build": "npm run prebuild && tsc",
+        "build": "tsc",
         "watch": "tsc -w",
         "test": "vitest --config vitest.config.mts",
         "cdk": "cdk",
