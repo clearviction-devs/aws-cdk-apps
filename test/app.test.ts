@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib'
 import { Template } from 'aws-cdk-lib/assertions'
+
 import * as LinkScan from '../lib/link-scan/link-scan-stack'
 
 test('Lambda Created', () => {

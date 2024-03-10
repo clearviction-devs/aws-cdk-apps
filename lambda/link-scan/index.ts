@@ -1,6 +1,6 @@
+import { SendEmailCommand, SESv2Client } from '@aws-sdk/client-sesv2'
 import { Handler } from 'aws-cdk-lib/aws-lambda'
 import { LinkChecker } from 'linkinator'
-import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2'
 
 const SES_EMAIL_FROM = 'info@clearviction.org'
 const SES_EMAIL_TO = 'info@clearviction.org'
