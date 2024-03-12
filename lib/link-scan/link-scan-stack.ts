@@ -16,15 +16,14 @@ export class LinkScanStack extends Stack {
             handler: 'handler',
             runtime: Runtime.NODEJS_18_X,
             timeout: Duration.seconds(300),
+            initialPolicy: [
+                new iam.PolicyStatement({
+                    effect: iam.Effect.ALLOW,
+                    actions: ['ses:SendEmail'],
+                    resources: ['*'],
+                }),
+            ],
         })
-
-        linkScanFn.addToRolePolicy(
-            new iam.PolicyStatement({
-                effect: iam.Effect.ALLOW,
-                actions: ['ses:SendEmail'],
-                resources: ['*'],
-            })
-        )
 
         // Timezone UTC
         const scheduleLambda = new events.Rule(
