@@ -61,7 +61,7 @@ export const checkLinks = async () => {
         recurse: true,
     })
 
-    const brokenLinksCount = result.links.filter((x) => x.state === 'BROKEN')
+    const brokenLinksCount = result.links.filter((result) => result.state === 'BROKEN')
 
     return {
         passed: result.passed,
