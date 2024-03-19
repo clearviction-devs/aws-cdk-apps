@@ -19,7 +19,6 @@ const URL_TO_SCAN = 'http://clearviction.org'
 const REGION = 'us-west-2'
 
 export const handler: Handler = async () => {
-
     const returnData: LinkData = await checkLinks()
 
     if (!returnData.passed) {
@@ -32,7 +31,7 @@ export const handler: Handler = async () => {
 export const checkLinks = async () => {
     const checker = new LinkChecker()
     const brokenLinks: LinkData['brokenLinks'] = []
-    
+
     try {
         checker.on('link', (result) => {
             if (result.state === 'BROKEN') {
@@ -43,13 +42,15 @@ export const checkLinks = async () => {
                 brokenLinks.push(newBrokenLink)
             }
         })
-    
+
         const result = await checker.check({
             path: URL_TO_SCAN,
             recurse: true,
         })
 
-        const brokenLinksCount = result.links.filter((result) => result.state === 'BROKEN')
+        const brokenLinksCount = result.links.filter(
+            (result) => result.state === 'BROKEN'
+        )
 
         return {
             passed: result.passed,

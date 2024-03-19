@@ -44,5 +44,4 @@ test('Link scan stack created with expected resources', () => {
             Principal: 'events.amazonaws.com',
         },
     })
-
 })

@@ -59,7 +59,6 @@ describe('sendEmail function', async () => {
 
         expect(sendEmail(linkData)).rejects.toThrow('Email failed to send')
     })
-
 })
 
 describe('checkLinks function', async () => {
@@ -116,5 +115,4 @@ describe('checkLinks function', async () => {
     it('handles errors during the link scan process', async () => {
         expect(checkLinks()).rejects.toThrow('Check failed')
     })
-
 })
