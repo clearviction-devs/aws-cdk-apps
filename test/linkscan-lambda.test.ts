@@ -1,6 +1,6 @@
 import { SendEmailCommand, SESv2Client } from '@aws-sdk/client-sesv2'
 import { mockClient } from 'aws-sdk-client-mock'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { checkLinks, LinkData, sendEmail } from '../lambda/link-scan/index'
 
@@ -23,7 +23,7 @@ describe('sendEmail function', async () => {
         ],
     }
 
-    it('sends an email with the link data', async () => {
+    it('sends an email with provided link data', async () => {
         sesv2Mock.on(SendEmailCommand).resolves({
             MessageId: '123',
         })
@@ -54,14 +54,19 @@ describe('sendEmail function', async () => {
         })
     })
 
-    it('handles errors successfully', async () => {
-        sesv2Mock.on(SendEmailCommand).rejects(new Error('Email failed'))
+    it('handles errors during the email send process', async () => {
+        sesv2Mock.on(SendEmailCommand).rejects()
 
-        expect(sendEmail(linkData)).rejects.toThrow('Email failed')
+        expect(sendEmail(linkData)).rejects.toThrow('Email failed to send')
     })
+
 })
 
 describe('checkLinks function', async () => {
+    afterEach(() => {
+        vi.resetAllMocks()
+    })
+
     vi.mock('linkinator', () => {
         const LinkChecker = vi.fn()
 
@@ -78,13 +83,16 @@ describe('checkLinks function', async () => {
                 }
             })
 
-        LinkChecker.prototype.check = vi.fn().mockResolvedValueOnce({
-            links: [
-                { state: 'BROKEN', url: 'http://example.com/broken' },
-                { state: 'OK', url: 'http://example.com/ok' },
-            ],
-            passed: false,
-        })
+        LinkChecker.prototype.check = vi
+            .fn()
+            .mockResolvedValueOnce({
+                links: [
+                    { state: 'BROKEN', url: 'http://example.com/broken' },
+                    { state: 'OK', url: 'http://example.com/ok' },
+                ],
+                passed: false,
+            })
+            .mockRejectedValueOnce(new Error('Check failed'))
 
         return { LinkChecker }
     })
@@ -104,4 +112,9 @@ describe('checkLinks function', async () => {
             ],
         })
     })
+
+    it('handles errors during the link scan process', async () => {
+        expect(checkLinks()).rejects.toThrow('Check failed')
+    })
+
 })
