@@ -19,55 +19,46 @@ const URL_TO_SCAN = 'http://clearviction.org'
 const REGION = 'us-west-2'
 
 export const handler: Handler = async () => {
-    try {
-        const returnData: LinkData = await checkLinks()
 
-        if (!returnData.passed) {
-            return await sendEmail(returnData)
-        }
+    const returnData: LinkData = await checkLinks()
 
-        return
-    } catch (error) {
-        return {
-            statusCode: 500,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                message: 'An error occurred while scanning the links',
-                error,
-            }),
-        }
+    if (!returnData.passed) {
+        return await sendEmail(returnData)
     }
+
+    return
 }
 
 export const checkLinks = async () => {
     const checker = new LinkChecker()
     const brokenLinks: LinkData['brokenLinks'] = []
-
-    checker.on('link', (result) => {
-        if (result.state === 'BROKEN') {
-            const newBrokenLink = {
-                url: result.url,
-                parent: result.parent,
+    
+    try {
+        checker.on('link', (result) => {
+            if (result.state === 'BROKEN') {
+                const newBrokenLink = {
+                    url: result.url,
+                    parent: result.parent,
+                }
+                brokenLinks.push(newBrokenLink)
             }
-            brokenLinks.push(newBrokenLink)
+        })
+    
+        const result = await checker.check({
+            path: URL_TO_SCAN,
+            recurse: true,
+        })
+
+        const brokenLinksCount = result.links.filter((result) => result.state === 'BROKEN')
+
+        return {
+            passed: result.passed,
+            linksScanned: result.links.length,
+            brokenLinksCount: brokenLinksCount.length,
+            brokenLinks,
         }
-    })
-
-    const result = await checker.check({
-        path: URL_TO_SCAN,
-        recurse: true,
-    })
-
-    const brokenLinksCount = result.links.filter((result) => result.state === 'BROKEN')
-
-    return {
-        passed: result.passed,
-        linksScanned: result.links.length,
-        brokenLinksCount: brokenLinksCount.length,
-        brokenLinks,
+    } catch (error) {
+        throw new Error('Check failed')
     }
 }
 
@@ -77,7 +68,12 @@ export const sendEmail = async (data: LinkData) => {
 
     const input = sendEmailParams(data, scanDate)
     const sendEmailCommand = new SendEmailCommand(input)
-    return await ses.send(sendEmailCommand)
+
+    try {
+        return await ses.send(sendEmailCommand)
+    } catch (error) {
+        throw new Error('Email failed to send')
+    }
 }
 
 const sendEmailParams = (
